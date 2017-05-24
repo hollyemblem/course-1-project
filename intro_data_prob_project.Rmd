@@ -110,7 +110,31 @@ Now, let's take a look at the other end of the spectrum; earners over $75,000.
 brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income2 =="$75,000 or more") %>% summarise(mean_physical_seven = mean(physhlth), median_physical_seven = median(physhlth), + sd_physical_seven=sd(physhlth), mean_mental_seven=mean(menthlth), median_mental_seven=median(menthlth), sf_mental_seven=sd(menthlth))
 ```
 
-Here we can see medians of 0 for both not good mental and physical health days. While this analysis has been helpful, it is focused on the extreme ends. Following further research, we can see that in the United States, the median household income for 2013 (when this survey took place) equals $51,939 (source: https://en.wikipedia.org/wiki/Household_income_in_the_United_States). Let's therefore create a new variable which separates survey participants into below and equals/above median income.
+Here we can see medians of 0 for both not good mental and physical health days. While this analysis has been helpful, it is focused on the extreme ends. Following further research, we can see that in the United States, the median household income for 2013 (when this survey took place) equals $51,939 (source: https://en.wikipedia.org/wiki/Household_income_in_the_United_States). Let's therefore create a new variable which creates a number only version of the income bands and then another which separates survey participants into below and equals/above median income.
+
+```{r}
+income_raw <-gsub("Less than", "", brfss2013$income2)
+income_raw <-gsub("or more", "", brfss2013$income2)
+income_raw <-gsub("$", "", brfss2013$income2)
+```
+
+```{r}
+brfss2013 <- brfss2013 %>% mutate(income_median= ifelse(income_raw >=51939, "Below", "Above"))
+```
+
+We can then create the same variables below and above the US median income.
+
+```{r}
+brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income_median =="Above") %>% summarise(mean_physical_above = mean(physhlth), median_physical_above = median(physhlth), sd_physical_above=sd(physhlth), mean_mental_above=mean(menthlth), median_mental_above=median(menthlth), sf_mental_above=sd(menthlth))
+```
+
+And then below:
+
+```{r}
+brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income_median =="Below") %>% summarise(mean_physical_below = mean(physhlth), median_physical_below = median(physhlth), sd_physical_below=sd(physhlth), mean_mental_below=mean(menthlth), median_mental_below=median(menthlth), sf_mental_below=sd(menthlth))
+```
+
+We can see that the medians remain the same, but there is a large discrepancy in the averages for those above/below the median income. While the mean is not a robust statisic in this instance, creating a further histogram showing the distribution of not good mental and physical health days depending on whether the income is above or below the median could be valuable. I believe this is valuable as the data has already indicated a difference between income and mental and physical health, so visualising this will help us understand it further.
 
 
 **Research quesion 2:**
