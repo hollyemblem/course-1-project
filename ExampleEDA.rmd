@@ -6,7 +6,6 @@ output:
     highlight: pygments
     theme: spacelab
 ---
-
 <div id="instructions">
 This is an unmarked optional tutorial to show the kind of thinking that goes into
 an exploratory data analysis
