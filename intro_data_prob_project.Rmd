@@ -136,6 +136,25 @@ brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income_median =="Below") 
 
 We can see that the medians remain the same, but there is a large discrepancy in the averages for those above/below the median income. While the mean is not a robust statisic in this instance, creating a further histogram showing the distribution of not good mental and physical health days depending on whether the income is above or below the median could be valuable. I believe this is valuable as the data has already indicated a difference between income and mental and physical health, so visualising this will help us understand it further.
 
+```{r}
+mental_health_na <- subset(brfss2013$menthlth,!is.na(brfss2013$menthlth))
+```
+
+```{r}
+physical_health_na <- subset(brfss2013$physhlth,!is.na(brfss2013$physhlth))
+```
+
+
+```{r}
+bucket<-list(physical_health = physical_health_na, mental_health = mental_health_na)
+```
+
+
+```{r}
+ggplot(melt(bucket), aes(value, fill = L1)) + geom_histogram(position = "stack", binwidth=0.5) + xlim(0,30) + coord_cartesian(ylim=c(0,1))
+```
+
+
 
 **Research quesion 2:**
 
