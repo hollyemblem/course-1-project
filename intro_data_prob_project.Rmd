@@ -155,7 +155,25 @@ Above Mental Health Visualisation
 ggplot(data=subset(brfss2013,income_median=="Above" & !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,150000)) 
 ```
 
-These findings continue to show a correlation between income and days of 'not good' mental and physical health. While we cannot imply causation between the two, these histograms showing distribution of values for Below/Above median incomes in the United States are certainly valuable in helping us understand the relationship between these variables.
+As a final measure, we can also take a look at the extreme end of the menthlth and physhlth measure. The probability of those Above/Below the median income will have 30 or more days of not good physical health or not good mental health. This is calculated like so:
+
+Physical Health Days
+
+```{r}
+brfss2013 %>% group_by(income_median) %>% summarise(thirtydays = sum(physhlth >= 30 & !is.na(physhlth) & !is.na(income_median) ) / n()) %>% arrange(desc(thirtydays))
+```
+
+Mental Health Days
+
+```{r}
+brfss2013 %>% group_by(income_median) %>% summarise(thirtydays = sum(menthlth >= 30 & !is.na(menthlth) & !is.na(income_median) ) / n()) %>% arrange(desc(thirtydays))
+```
+
+Here we find something very interesting: We can see that participants below the median income are more likely to experience the more extreme end (>=30) of not good mental & physical health days. 
+
+Taken all together, these findings continue to show a correlation between income and days of 'not good' mental and physical health. While we cannot imply causation between the two, these histograms showing distribution of values for Below/Above median incomes in the United States are certainly valuable in helping us understand the relationship between these variables.
+
+
 
 **Research quesion 2:**
 
