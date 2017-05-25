@@ -27,7 +27,15 @@ load("brfss2013.RData")
 * * *
 
 ## Part 1: Data
+The BRFSS 2013 dataset is a survey which samples a selection of the United States population across all 50 states. The survey contains findings from non-institutionalised correspondents and those that are 18 or older and is "designed to measure behavioral risk factors" (Source: BRFSS2013 codebook). 
 
+Therefore, we cannot use this information to infer information about children within the US population, or adults within prison, for example.
+
+The survey uses random sampling (Source: BRFSS2013 codebook) and interviews take place over the telephone, both via landline and cellular. With this in mind, it is worth noting that the survey will not contain any insights about either participants in the survey or those within the general population that do not have telephones. 
+
+Bearing the above in mind, given the large sample size and use of random sampling, we can take this sample as typical of the population from which it is drawn: That is non-institutionalised adults aged 18 and over within the United States.
+
+Finally, as this data is effectively observational and not a designed experiment where  for example, we would assign particpants to two groups (a control and test), we cannot imply causation with any findings we might discover. 
 
 * * *
 
@@ -42,7 +50,7 @@ I would like to understand if mental or physical health illness, or both, are mo
 
 **Research question 2:**
 
-What amount of healthy food is consumed per state?
+How much healthy food is consumed per state?
 
 We know that even though levels of obesity are levelling off, rates are still "alarmingly higher" compared to a generation ago (Source: http://stateofobesity.org/rates/). As obesity is linked to diet (https://www.hsph.harvard.edu/obesity-prevention-source/obesity-causes/diet-and-weight/) it will be interesting to take an initial look at the total amount of healthy food consumed, per state.
 
@@ -56,7 +64,10 @@ We know that U.S city population continues to rise (https://www.usatoday.com/sto
 
 ## Part 3: Exploratory data analysis
 
-**Research question 1:**
+##Research question 1:
+
+**Is there a relationship between income and number of days of poor (specified as 'not good') health?**
+
 Having looked at the codebook and identified my variables:
 
 * Number Of Days Physical Health Not Good
@@ -192,8 +203,10 @@ Taken all together, these findings continue to show a correlation between income
 
 
 
-**Research question 2:**
-My research question will examine if there is a relationship between the amount of healthy food consumed per state. First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:
+## Research question 2:
+**How much healthy food is consumed per state?**
+
+First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:
 
 *fruitju1: How Many Times Did You Drink 100 Percent Pure Fruit Juices?
 *fruit1: How Many Times Did You Eat Fruit?
@@ -274,7 +287,9 @@ brfss2013 %>% group_by(X_state) %>% summarise(healthfoodtotal = sum(fruitju1+fru
 We can see here that Florida eats the most amount of healthy food. Going forward, we could create a density map to understand this further, and create a ratio of healthy food per person in state, but for now we have answered our research question of the most amount of healthy food consumed per state.
 
 
-**Research question 3:**
+##Research question 3:
+
+**What is the average amount of adults per household, per state?**
 
 For this research question, we will be using the following variables:
 

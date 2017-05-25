@@ -163,6 +163,11 @@ $(document).ready(function () {
 </div>
 <div id="part-1-data" class="section level2">
 <h2>Part 1: Data</h2>
+<p>The BRFSS 2013 dataset is a survey which samples a selection of the United States population across all 50 states. The survey contains findings from non-institutionalised correspondents and those that are 18 or older and is “designed to measure behavioral risk factors” (Source: BRFSS2013 codebook).</p>
+<p>Therefore, we cannot use this information to infer information about children within the US population, or adults within prison, for example.</p>
+<p>The survey uses random sampling (Source: BRFSS2013 codebook) and interviews take place over the telephone, both via landline and cellular. With this in mind, it is worth noting that the survey will not contain any insights about either participants in the survey or those within the general population that do not have telephones.</p>
+<p>Bearing the above in mind, given the large sample size and use of random sampling, we can take this sample as typical of the population from which it is drawn: That is non-institutionalised adults aged 18 and over within the United States.</p>
+<p>Finally, as this data is effectively observational and not a designed experiment where for example, we would assign particpants to two groups (a control and test), we cannot imply causation with any findings we might discover.</p>
 <hr />
 </div>
 <div id="part-2-research-questions" class="section level2">
@@ -171,16 +176,20 @@ $(document).ready(function () {
 <p>Within the data, there are two numerical variables associated with health; Number Of Days Physical Health Not Good and Number Of Days Mental Health Not Good. Alongside this, there is also a categorical variable which contains income bands (Income Level).</p>
 <p>I would like to understand if mental or physical health illness, or both, are more prevalent for income levels, as well as what the average looks like for survey participants. It is worth noting that we cannot imply causation, but we can still investigation the correlation between income level and mental/physical health.</p>
 <p><strong>Research question 2:</strong></p>
-<p>What amount of healthy food is consumed per state?</p>
+<p>How much healthy food is consumed per state?</p>
 <p>We know that even though levels of obesity are levelling off, rates are still “alarmingly higher” compared to a generation ago (Source: <a href="http://stateofobesity.org/rates/" class="uri">http://stateofobesity.org/rates/</a>). As obesity is linked to diet (<a href="https://www.hsph.harvard.edu/obesity-prevention-source/obesity-causes/diet-and-weight/" class="uri">https://www.hsph.harvard.edu/obesity-prevention-source/obesity-causes/diet-and-weight/</a>) it will be interesting to take an initial look at the total amount of healthy food consumed, per state.</p>
 <p><strong>Research question 3:</strong></p>
 <p>What is the average amount of adults per household, per state?</p>
-<p>We know that U.S city population continues to rise (<a href="https://www.usatoday.com/story/news/2016/05/19/census-shows-big-us-cities-continue-grow/84552378/" class="uri">https://www.usatoday.com/story/news/2016/05/19/census-shows-big-us-cities-continue-grow/84552378/</a>) and as such, it will be interesting to understand the average amount of adults per household, per state.</p>
+<p>We know that U.S city population continues to rise (<a href="https://www.usatoday.com/story/news/2016/05/19/census-shows-big-us-cities-continue-grow/84552378/" class="uri">https://www.usatoday.com/story/news/2016/05/19/census-shows-big-us-cities-continue-grow/84552378/</a>) and as such, it will be interesting to understand the average amount of adults per household, per state. We will also investigate if ‘average’ is robust enough statistic to use, in this instance.</p>
 <hr />
 </div>
 <div id="part-3-exploratory-data-analysis" class="section level2">
 <h2>Part 3: Exploratory data analysis</h2>
-<p><strong>Research question 1:</strong> Having looked at the codebook and identified my variables:</p>
+</div>
+<div id="research-question-1" class="section level2">
+<h2>Research question 1:</h2>
+<p><strong>Is there a relationship between income and number of days of poor (specified as ‘not good’) health?</strong></p>
+<p>Having looked at the codebook and identified my variables:</p>
 <ul>
 <li>Number Of Days Physical Health Not Good</li>
 <li>Number Of Days Mental Health Not Good</li>
@@ -315,10 +324,14 @@ $(document).ready(function () {
 ## 3          &lt;NA&gt; 0.00000000</code></pre>
 <p>Here we find something very interesting: We can see that participants below the median income are more likely to experience the more extreme end (&gt;=30) of not good mental &amp; physical health days.</p>
 <p>Taken all together, these findings continue to show a correlation between income and days of ‘not good’ mental and physical health. While we cannot imply causation between the two, these histograms showing distribution of values for Below/Above median incomes in the United States are certainly valuable in helping us understand the relationship between these variables.</p>
-<p><strong>Research question 2:</strong> My research question will examine if there is a relationship between the amount of healthy food consumed per state. First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:</p>
+</div>
+</div>
+<div id="research-question-2" class="section level2">
+<h2>Research question 2:</h2>
+<p><strong>How much healthy food is consumed per state?</strong></p>
+<p>First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:</p>
 <p><em>fruitju1: How Many Times Did You Drink 100 Percent Pure Fruit Juices? </em>fruit1: How Many Times Did You Eat Fruit? <em>fvbeans: How Many Times Did You Eat Beans Or Lentils? </em>fvgreen: How Many Times Did You Eat Dark Green Vegetables? <em>fvorang: How Many Times Did You Eat Orange-Colored Vegetables? </em>vegetab1: How Many Times Did You Eat Other Vegetables?</p>
 <p>As in step 1, I can calculate the mean, median and standard deviation for each variable.</p>
-</div>
 <div id="fruit-juice-measures-of-center" class="section level3">
 <h3>Fruit Juice Measures of Center</h3>
 <p><em>fruitju1</em></p>
@@ -373,7 +386,11 @@ $(document).ready(function () {
 ## 10      Maryland           11403
 ## # ... with 45 more rows</code></pre>
 <p>We can see here that Florida eats the most amount of healthy food. Going forward, we could create a density map to understand this further, and create a ratio of healthy food per person in state, but for now we have answered our research question of the most amount of healthy food consumed per state.</p>
-<p><strong>Research question 3:</strong></p>
+</div>
+</div>
+<div id="research-question-3" class="section level2">
+<h2>Research question 3:</h2>
+<p><strong>What is the average amount of adults per household, per state?</strong></p>
 <p>For this research question, we will be using the following variables:</p>
 <ul>
 <li>_State: a categorical variable, State Fips code</li>
@@ -396,7 +413,6 @@ $(document).ready(function () {
 ## 10       Texas      1.851417
 ## # ... with 43 more rows</code></pre>
 <p>We have stated in the research question that we want to find the ‘average’, but perhaps we also need to consider whether the average is a robust statistic. To understand this, we can calculate the Measures of Center for this numeric variable.</p>
-</div>
 <div id="number-of-adults-per-household-measures-of-center" class="section level3">
 <h3>Number of Adults per Household Measures of Center</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brfss2013 %&gt;%<span class="st"> </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(numadult)) %&gt;%<span class="st"> </span><span class="kw">summarise</span>(<span class="dt">mean_numadult =</span> <span class="kw">mean</span>(<span class="kw">as.numeric</span>(numadult)), <span class="dt">median_numadult=</span><span class="kw">median</span>(<span class="kw">as.numeric</span>(numadult)), <span class="dt">sd_adult=</span><span class="kw">sd</span>(<span class="kw">as.numeric</span>(numadult)))</code></pre></div>
