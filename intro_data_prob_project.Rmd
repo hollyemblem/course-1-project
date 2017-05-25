@@ -41,11 +41,8 @@ Within the data, there are two numerical variables associated with health; Numbe
 I would like to understand if mental or physical health illness, or both, are more prevalent for income levels, as well as what the average looks like for survey participants. It is worth noting that we cannot imply causation, but we can still investigation the correlation between income level and mental/physical health.
 
 **Research question 2:**
-Are veterans more or less likely to have access to medical treatment they need?
 
-For this question, I will look at the following variables; Veteran or Not (categorical), Could not see Dr due to Cost (categorical) and Have any Healthcare Coverage (categorical).
-
-I would like to understand if being a veteran gives you more or less access to  healthcare coverage and treatment.
+What amount of healthy food is consumed per state?
 
 **Research question 3:**
 
@@ -190,12 +187,86 @@ Taken all together, these findings continue to show a correlation between income
 
 
 
-**Research quesion 2:**
+**Research question 2:**
+My research question will examine if there is a relationship between the amount of healthy food consumed per state. First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:
+
+*fruitju1: How Many Times Did You Drink 100 Percent Pure Fruit Juices?
+*fruit1: How Many Times Did You Eat Fruit?
+*fvbeans: How Many Times Did You Eat Beans Or Lentils?
+*fvgreen: How Many Times Did You Eat Dark Green Vegetables?
+*fvorang: How Many Times Did You Eat Orange-Colored Vegetables?
+*vegetab1: How Many Times Did You Eat Other Vegetables?
+
+As in step 1, I can calculate the mean, median and standard deviation for each variable.
+
+### Fruit Juice Measures of Center
+
+*fruitju1*
 
 ```{r}
-
+brfss2013 %>% filter(!is.na(fruitju1)) %>% summarise(mean_fruitju1 = mean(fruitju1), median_fruitju1 = median(fruitju1), sd_fruitjul=sd(fruitju1), n=n())
 ```
 
+We can see that the mean is greater than the median, indicating a right skew. This can be confirmed with a histogram:
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(fruitju1)), aes(x=fruitju1)) + geom_histogram(binwidth=30)
+```
+
+*fruit1*
+
+We can calculate the same for the fruit variable:
+
+```{r}
+brfss2013 %>% filter(!is.na(fruit1)) %>% summarise(mean_fruit1 = mean(fruit1), median_fruit1 = median(fruit1), sd_fruit=sd(fruit1), n=n())
+```
+
+Again, another right skew is suspected here, which can be confirmed with a histogram
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(fruit1)), aes(x=fruit1)) + geom_histogram(binwidth=30)
+```
+
+As there are several variables, we can quickly calculate the measures of center for each one:
+
+*fvbeans*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvbeans)) %>% summarise(mean_fvbeans = mean(fvbeans), median_fvbeans = median(fvbeans), sd_fvbeans=sd(fvbeans), n=n())
+```
+
+*fvgreen*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvgreen)) %>% summarise(mean_fvgreen = mean(fvgreen), median_fvgreens = median(fvgreen), sd_fvgreens=sd(fvgreen), n=n())
+```
+
+*fvorang*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvorang)) %>% summarise(mean_fvorang = mean(fvorang), median_fvorang = median(fvorang), sd_fvorang=sd(fvorang), n=n())
+```
+
+*vegetab1*
+
+```{r}
+brfss2013 %>% filter(!is.na(vegetab1)) %>% summarise(mean_vegetab = mean(vegetab1), median_vegetab = median(vegetab1), sd_vegetab=sd(vegetab1), n=n())
+```
+
+Interestingly, we can see a much closer match between the median and the mean, so it is worthwhile creating a histogram of this data:
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(vegetab1)), aes(x=vegetab1)) + geom_histogram(binwidth=30)
+```
+
+
+Now we have assessed the individual variables, we can then create a view of the amount of healthy food eaten, per state:
+
+```{r}
+brfss2013 %>% group_by(X_state) %>% summarise(healthfoodtotal = sum(fruitju1+fruit1+fvbeans+fvorang+vegetab1 & !is.na(fruitju1) & !is.na(fruit1)  & !is.na(fvbeans) & !is.na(fvorang) & !is.na(vegetab1))) %>% arrange(desc(healthfoodtotal))
+```
+
+We can see here that Florida eats the most amount of healthy food. Going forward, we could create a density map to understand this further, and create a ratio of healthy food per person in state, but for now we have answered our research question of the most amount of healthy food consumed per state.
 
 
 **Research quesion 3:**
