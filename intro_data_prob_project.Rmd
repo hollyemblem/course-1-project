@@ -48,6 +48,9 @@ We know that even though levels of obesity are levelling off, rates are still "a
 
 **Research question 3:**
 
+What is the average amount of adults per household, per state?
+
+We know that U.S city population continues to rise (https://www.usatoday.com/story/news/2016/05/19/census-shows-big-us-cities-continue-grow/84552378/) and as such, it will be interesting to understand the average amount of adults per household, per state. We will also investigate if 'average' is robust enough statistic to use, in this instance.
 
 * * *
 
@@ -271,9 +274,32 @@ brfss2013 %>% group_by(X_state) %>% summarise(healthfoodtotal = sum(fruitju1+fru
 We can see here that Florida eats the most amount of healthy food. Going forward, we could create a density map to understand this further, and create a ratio of healthy food per person in state, but for now we have answered our research question of the most amount of healthy food consumed per state.
 
 
-**Research quesion 3:**
+**Research question 3:**
+
+For this research question, we will be using the following variables:
+
+* _State: a categorical variable, State Fips code
+* numadult: a numeric variable, Number Of Adults In Household
+
+On the face of it, this is relatively simple question to answer, as we simply need to calculate the average amount of number of adults in household, per state:
 
 ```{r}
-
+brfss2013 %>% group_by(X_state) %>% filter(!is.na(numadult)) %>% summarise(mean_numadult = mean(as.numeric(numadult))) %>% arrange(desc(mean_numadult))
 ```
+
+We have stated in the research question that we want to find the 'average', but perhaps we also need to consider whether the average is a robust statistic. To understand this, we can calculate the Measures of Center for this numeric variable.
+
+### Number of Adults per Household Measures of Center
+
+```{r}
+brfss2013 %>% filter(!is.na(numadult)) %>% summarise(mean_numadult = mean(as.numeric(numadult)), median_numadult=median(as.numeric(numadult)), sd_adult=sd(as.numeric(numadult)))
+```
+
+The median and average are quite close and we can also confirm this by plotting the data. However, unlike the earlier questions, this numeric variable is *discrete*, not continuous, so we'll actually plot a bar chart:
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(numadult)), aes(x=numadult)) + geom_bar()
+```
+
+Given that the median and average are close, we can feel relatively confident using an average.
 
