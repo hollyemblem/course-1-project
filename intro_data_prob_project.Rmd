@@ -72,7 +72,7 @@ brfss2013 %>% filter(!is.na(menthlth)) %>% summarise(mean_mental = mean(menthlth
 We can see that there is a big difference between the mean and the median. This suggests a right skew, as the mean is greater than the median. We can confirm this by building a histogram:
 
 ```{r}
-ggplot(data=subset(brfss2013, !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + xlim(0, 50)
+ggplot(data=subset(brfss2013, !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + xlim(0, 50) + ylim(0,10000)
 ```
 
 This right skew is confirmed by the histogram. Understanding the skew of the data helps us to see that this is not a normal distribution. We can then see if there are any differences with the physical health variable.
@@ -84,7 +84,7 @@ brfss2013 %>% filter(!is.na(physhlth)) %>% summarise(mean_physical = mean(physhl
 Again, we can see that the mean is much greater than the median. Creating another histogram, we can then view the distribution of this variable.
 
 ```{r}
-ggplot(data=subset(brfss2013, !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + xlim(0, 50)
+ggplot(data=subset(brfss2013, !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + xlim(0, 50) + ylim(0,10000)
 ```
 
 We can now confirm there is a definite right skew for the amount of not good physical and mental health days. We therefore need to use a robust statistic for understanding if the number of not good mental and physical health days differs per income type.
@@ -135,15 +135,27 @@ We can see that the medians remain the same, but there is a large discrepancy in
 
 Below Physical Health Visualisation
 ```{r}
-ggplot(data=subset(brfss2013,income_median=="Below",!is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5)
+ggplot(data=subset(brfss2013,income_median=="Below" & !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + xlim(0,50) + ylim(0,10000)
 ```
 
 Above Physical Health Visualisation
 
 ```{r}
-ggplot(data=subset(brfss2013,income_median=="Above",!is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5)
+ggplot(data=subset(brfss2013,income_median=="Above" & !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + xlim(0,50) + ylim(0,10000)
 ```
 
+Below Mental Health Visualisation
+
+```{r}
+ggplot(data=subset(brfss2013,income_median=="Below" & !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + xlim(0,50)  + ylim(0,10000)
+```
+
+Above Mental Health Visualisation
+```{r}
+ggplot(data=subset(brfss2013,income_median=="Above" & !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + xlim(0,50) + ylim(0,10000)
+```
+
+These findings show that amongst those below the median income in the United States, "not good" mental and physical health days are spread across a range, with a bimodal distribution. For those above the median, the data is still right-skewed, but is unimodal.
 
 **Research quesion 2:**
 
