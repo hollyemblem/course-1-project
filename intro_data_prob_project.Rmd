@@ -18,10 +18,6 @@ library(dplyr)
 
 ### Load data
 
-Make sure your data and R Markdown files are in the same directory. When loaded
-your data file will be called `brfss2013`. Delete this note when before you submit 
-your work. 
-
 ```{r load-data}
 load("brfss2013.RData")
 ```
@@ -37,33 +33,42 @@ load("brfss2013.RData")
 
 ## Part 2: Research questions
 
-**Research quesion 1:**
+**Research question 1:**
 My first question is: Is there a relationship between income and number of days of poor (specified as 'not good') health? 
 
-Within the data, there are two categorical variables associated with health; number of days of poor (not good) physical health and number of days of poor (not good) mental health. 
+Within the data, there are two numerical variables associated with health; Number Of Days Physical Health Not Good and Number Of Days Mental Health Not Good. Alongside this, there is also a categorical variable which contains income bands (Income Level).
 
-It will be interesting to understand if mental or physical health illness, or both, are more prevalent within certain income types, as well as what the average looks like for survey participants.
-**Research quesion 2:**
+I would like to understand if mental or physical health illness, or both, are more prevalent for income levels, as well as what the average looks like for survey participants. It is worth noting that we cannot imply causation, but we can still investigation the correlation between income level and mental/physical health.
 
-**Research quesion 3:**
+**Research question 2:**
+
+What amount of healthy food is consumed per state?
+
+We know that even though levels of obesity are levelling off, rates are still "alarmingly higher" compared to a generation ago (Source: http://stateofobesity.org/rates/). As obesity is linked to diet (https://www.hsph.harvard.edu/obesity-prevention-source/obesity-causes/diet-and-weight/) it will be interesting to take an initial look at the total amount of healthy food consumed, per state.
+
+**Research question 3:**
 
 
 * * *
 
 ## Part 3: Exploratory data analysis
 
-NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
-button (green button with orange arrow) above. Make sure that your code is visible
-in the project you submit. Delete this note when before you submit your work.
+**Research question 1:**
+Having looked at the codebook and identified my variables:
 
-**Research quesion 1:**
-In the first instance, I want to exclude data that is NA, as this is not relevant to my question, for example, we only want to compare mental and physical health where we know the income amount.
+* Number Of Days Physical Health Not Good
+* Number Of Days Mental Health Not Good 
+* Income Level
+
+In the first instance, I want to exclude data that is NA, as this is not relevant to my question, for example, we only want to compare mental and physical health where we know the income level.
 ```{r}
 brfss2013 %>% filter(!is.na(income2),!is.na(physhlth),!is.na(menthlth)) %>%
  group_by(income2,physhlth,menthlth) %>% summarise(count=n())
 ```
 
 Next, I am interested to understand what the mean, median and standard deviation looks like for days of not good mental and physical health. This will help me understand if there are any initial skews within the data.
+
+### Mental Health Measures of Center
 
 ```{r}
 brfss2013 %>% filter(!is.na(menthlth)) %>% summarise(mean_mental = mean(menthlth), median_mental = median(menthlth), sd_mental=sd(menthlth), n=n())
@@ -72,10 +77,12 @@ brfss2013 %>% filter(!is.na(menthlth)) %>% summarise(mean_mental = mean(menthlth
 We can see that there is a big difference between the mean and the median. This suggests a right skew, as the mean is greater than the median. We can confirm this by building a histogram:
 
 ```{r}
-ggplot(data=subset(brfss2013, !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,300000)) 
+ggplot(data=subset(brfss2013, !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,350000)) 
 ```
 
-This right skew is confirmed by the histogram. Understanding the skew of the data helps us to see that this is not a normal distribution. We can then see if there are any differences with the physical health variable.
+This right skew is confirmed by the histogram. Understanding the skew of the data helps us to see that this is not a normal distribution. We can then see if there are any differences with the physical health numerical variable.
+
+### Physical Health Measures of Center
 
 ```{r}
 brfss2013 %>% filter(!is.na(physhlth)) %>% summarise(mean_physical = mean(physhlth), median_physical = median(physhlth), sd_physical=sd(physhlth), n=n())
@@ -88,6 +95,8 @@ ggplot(data=subset(brfss2013, !is.na(physhlth)), aes(x=physhlth)) + geom_histogr
 ```
 
 We can now confirm there is a definite right skew for the amount of not good physical and mental health days. We therefore need to use a robust statistic for understanding if the number of not good mental and physical health days differs per income type.
+
+### Income Level, Mental and Physical Health Measures of Center
 
 To understand how we'll calculate this, we'll then look at the different groupings of income type.
 
@@ -108,6 +117,8 @@ Now, let's take a look at the other end of the spectrum; earners over $75,000.
 ```{r}
 brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income2 =="$75,000 or more") %>% summarise(mean_physical_seven = mean(physhlth), median_physical_seven = median(physhlth),sd_physical_seven=sd(physhlth), mean_mental_seven=mean(menthlth), median_mental_seven=median(menthlth), sf_mental_seven=sd(menthlth))
 ```
+
+### External Variable: Median United States Household Income
 
 Here we can see medians of 0 for both not good mental and physical health days. While this analysis has been helpful, it is focused on the extreme ends. Following further research, we can see that in the United States, the median household income for 2013 (when this survey took place) equals $51,939 (source: https://en.wikipedia.org/wiki/Household_income_in_the_United_States). Let's therefore create a new variable which creates a number only version of the income bands and then another which separates survey participants into below and equals/above median income.
 
@@ -131,39 +142,42 @@ And then below:
 brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income_median =="Below") %>% summarise(mean_physical_below = mean(physhlth), median_physical_below = median(physhlth), sd_physical_below=sd(physhlth), mean_mental_below=mean(menthlth), median_mental_below=median(menthlth), sf_mental_below=sd(menthlth))
 ```
 
-We can see that the medians remain the same, but there is a large discrepancy in the averages for those above/below the median income. While the mean is not a robust statisic in this instance, creating a further histogram showing the distribution of not good mental and physical health days depending on whether the income is above or below the median could be valuable. I believe this is valuable as the data has already indicated a difference between income and mental and physical health, so visualising this will help us understand it further.
+We can see that the medians remain the same, but there is a discrepancy in the averages for those above/below the median income. While the mean is not a robust statisic in this instance, creating a further histogram showing the distribution of not good mental and physical health days depending on whether the income is above or below the median could be valuable. I believe this is valuable as the data has already indicated a difference between income and mental and physical health, so visualising this will help us understand it further.
 
-Below Physical Health Visualisation
+### Income Level Below Median & Physical Health Histogram
 ```{r}
 ggplot(data=subset(brfss2013,income_median=="Below" & !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,150000)) 
 ```
 
-Above Physical Health Visualisation
+### Income Level Above Median & Physical Health Histogram
 
 ```{r}
 ggplot(data=subset(brfss2013,income_median=="Above" & !is.na(physhlth)), aes(x=physhlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,150000)) 
 ```
 
-Below Mental Health Visualisation
+### Income Level Below Median & Mental Health Histogram
 
 ```{r}
 ggplot(data=subset(brfss2013,income_median=="Below" & !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,150000)) 
 ```
 
-Above Mental Health Visualisation
+### Income Level Above Medial & Mental Health Histogram
 ```{r}
 ggplot(data=subset(brfss2013,income_median=="Above" & !is.na(menthlth)), aes(x=menthlth)) + geom_histogram(binwidth=0.5) + coord_cartesian(xlim = c(0, 30), ylim = c(0,150000)) 
 ```
 
+### Probability Calculations
+
 As a final measure, we can also take a look at the extreme end of the menthlth and physhlth measure. The probability of those Above/Below the median income will have 30 or more days of not good physical health or not good mental health. This is calculated like so:
 
-Physical Health Days
+*Physical Health Days*
+
 
 ```{r}
 brfss2013 %>% group_by(income_median) %>% summarise(thirtydays = sum(physhlth >= 30 & !is.na(physhlth) & !is.na(income_median) ) / n()) %>% arrange(desc(thirtydays))
 ```
 
-Mental Health Days
+*Mental Health Days*
 
 ```{r}
 brfss2013 %>% group_by(income_median) %>% summarise(thirtydays = sum(menthlth >= 30 & !is.na(menthlth) & !is.na(income_median) ) / n()) %>% arrange(desc(thirtydays))
@@ -175,12 +189,86 @@ Taken all together, these findings continue to show a correlation between income
 
 
 
-**Research quesion 2:**
+**Research question 2:**
+My research question will examine if there is a relationship between the amount of healthy food consumed per state. First off, I will understand the distribution of each healthy food variable. These variables are all numerical and are:
+
+*fruitju1: How Many Times Did You Drink 100 Percent Pure Fruit Juices?
+*fruit1: How Many Times Did You Eat Fruit?
+*fvbeans: How Many Times Did You Eat Beans Or Lentils?
+*fvgreen: How Many Times Did You Eat Dark Green Vegetables?
+*fvorang: How Many Times Did You Eat Orange-Colored Vegetables?
+*vegetab1: How Many Times Did You Eat Other Vegetables?
+
+As in step 1, I can calculate the mean, median and standard deviation for each variable.
+
+### Fruit Juice Measures of Center
+
+*fruitju1*
 
 ```{r}
-
+brfss2013 %>% filter(!is.na(fruitju1)) %>% summarise(mean_fruitju1 = mean(fruitju1), median_fruitju1 = median(fruitju1), sd_fruitjul=sd(fruitju1), n=n())
 ```
 
+We can see that the mean is greater than the median, indicating a right skew. This can be confirmed with a histogram:
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(fruitju1)), aes(x=fruitju1)) + geom_histogram(binwidth=30)
+```
+
+*fruit1*
+
+We can calculate the same for the fruit variable:
+
+```{r}
+brfss2013 %>% filter(!is.na(fruit1)) %>% summarise(mean_fruit1 = mean(fruit1), median_fruit1 = median(fruit1), sd_fruit=sd(fruit1), n=n())
+```
+
+Again, another right skew is suspected here, which can be confirmed with a histogram
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(fruit1)), aes(x=fruit1)) + geom_histogram(binwidth=30)
+```
+
+As there are several variables, we can quickly calculate the measures of center for each one:
+
+*fvbeans*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvbeans)) %>% summarise(mean_fvbeans = mean(fvbeans), median_fvbeans = median(fvbeans), sd_fvbeans=sd(fvbeans), n=n())
+```
+
+*fvgreen*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvgreen)) %>% summarise(mean_fvgreen = mean(fvgreen), median_fvgreens = median(fvgreen), sd_fvgreens=sd(fvgreen), n=n())
+```
+
+*fvorang*
+
+```{r}
+brfss2013 %>% filter(!is.na(fvorang)) %>% summarise(mean_fvorang = mean(fvorang), median_fvorang = median(fvorang), sd_fvorang=sd(fvorang), n=n())
+```
+
+*vegetab1*
+
+```{r}
+brfss2013 %>% filter(!is.na(vegetab1)) %>% summarise(mean_vegetab = mean(vegetab1), median_vegetab = median(vegetab1), sd_vegetab=sd(vegetab1), n=n())
+```
+
+Interestingly, we can see a much closer match between the median and the mean, so it is worthwhile creating a histogram of this data:
+
+```{r}
+ggplot(data=subset(brfss2013, !is.na(vegetab1)), aes(x=vegetab1)) + geom_histogram(binwidth=30)
+```
+
+
+Now we have assessed the individual variables, we can then create a view of the amount of healthy food eaten, per state:
+
+```{r}
+brfss2013 %>% group_by(X_state) %>% summarise(healthfoodtotal = sum(fruitju1+fruit1+fvbeans+fvorang+vegetab1 & !is.na(fruitju1) & !is.na(fruit1)  & !is.na(fvbeans) & !is.na(fvorang) & !is.na(vegetab1))) %>% arrange(desc(healthfoodtotal))
+```
+
+We can see here that Florida eats the most amount of healthy food. Going forward, we could create a density map to understand this further, and create a ratio of healthy food per person in state, but for now we have answered our research question of the most amount of healthy food consumed per state.
 
 
 **Research quesion 3:**
