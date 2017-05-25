@@ -33,7 +33,7 @@ load("brfss2013.RData")
 
 ## Part 2: Research questions
 
-**Research quesion 1:**
+**Research question 1:**
 My first question is: Is there a relationship between income and number of days of poor (specified as 'not good') health? 
 
 Within the data, there are two numerical variables associated with health; Number Of Days Physical Health Not Good and Number Of Days Mental Health Not Good. Alongside this, there is also a categorical variable which contains income bands (Income Level).
@@ -43,6 +43,8 @@ I would like to understand if mental or physical health illness, or both, are mo
 **Research question 2:**
 
 What amount of healthy food is consumed per state?
+
+We know that even though levels of obesity are levelling off, rates are still "alarmingly higher" compared to a generation ago (Source: http://stateofobesity.org/rates/). As obesity is linked to diet (https://www.hsph.harvard.edu/obesity-prevention-source/obesity-causes/diet-and-weight/) it will be interesting to take an initial look at the total amount of healthy food consumed, per state.
 
 **Research question 3:**
 
