@@ -132,9 +132,11 @@ Now, let's take a look at the other end of the spectrum; earners over $75,000.
 brfss2013 %>% filter(!is.na(physhlth),!is.na(menthlth),income2 =="$75,000 or more") %>% summarise(mean_physical_seven = mean(physhlth), median_physical_seven = median(physhlth),sd_physical_seven=sd(physhlth), mean_mental_seven=mean(menthlth), median_mental_seven=median(menthlth), sf_mental_seven=sd(menthlth))
 ```
 
+Here we can see medians of 0 for both not good mental and physical health days for earners of $75,000 or more. This is different to the below $10,000 survey correspondents, indicating that those who earn less than $10,000 have a greater median of not good physical health days.
+
 ### External Variable: Median United States Household Income
 
-Here we can see medians of 0 for both not good mental and physical health days. While this analysis has been helpful, it is focused on the extreme ends. Following further research, we can see that in the United States, the median household income for 2013 (when this survey took place) equals $51,939 (source: https://en.wikipedia.org/wiki/Household_income_in_the_United_States). Let's therefore create a new variable which creates a number only version of the income bands and then another which separates survey participants into below and equals/above median income.
+ While this analysis has been helpful, it is focused on the extreme ends. Following further research, we can see that in the United States, the median household income for 2013 (when this survey took place) equals $51,939 (Source: https://en.wikipedia.org/wiki/Household_income_in_the_United_States). Let's therefore create a new variable which creates a number only version of the income bands and then another which separates survey participants into below and equals/above median income.
 
 ```{r}
 brfss2013 <- mutate(brfss2013, income_raw=gsub("Less than|or more|\\$| ", "", brfss2013$income2))
@@ -199,7 +201,7 @@ brfss2013 %>% group_by(income_median) %>% summarise(thirtydays = sum(menthlth >=
 
 Here we find something very interesting: We can see that participants below the median income are more likely to experience the more extreme end (>=30) of not good mental & physical health days. 
 
-Taken all together, these findings continue to show a correlation between income and days of 'not good' mental and physical health. While we cannot imply causation between the two, these histograms showing distribution of values for Below/Above median incomes in the United States are certainly valuable in helping us understand the relationship between these variables.
+Taken all together, these findings continue to show a correlation between income and days of 'not good' mental and physical health. While we cannot imply causation between these variables, these histograms showing distribution of values for Below/Above median incomes in the United States are certainly valuable in helping us understand the relationship between these variables.
 
 
 
@@ -310,7 +312,7 @@ We have stated in the research question that we want to find the 'average', but 
 brfss2013 %>% filter(!is.na(numadult)) %>% summarise(mean_numadult = mean(as.numeric(numadult)), median_numadult=median(as.numeric(numadult)), sd_adult=sd(as.numeric(numadult)))
 ```
 
-The median and average are quite close and we can also confirm this by plotting the data. However, unlike the earlier questions, this numeric variable is *discrete*, not continuous, so we'll actually plot a bar chart:
+The median and average are quite close and we can also confirm this by plotting the data. However, unlike the earlier questions, this numeric variable is *discrete*, not continuous, so we'll actually plot a bar chart. This is confirmed by ggplot, as when we try to create a histogram, we receive a warning. We'll therefore opt for a bar chart:
 
 ```{r}
 ggplot(data=subset(brfss2013, !is.na(numadult)), aes(x=numadult)) + geom_bar()
